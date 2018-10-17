@@ -1,8 +1,8 @@
 plugins {
-    id 'nu.studer.plugindev' version '1.0.3'
+    id 'nu.studer.plugindev' version '1.0.6'
 
     // Should come along with plugindev, but plugindev uses an old version
-    id 'com.jfrog.bintray' version '1.6'
+//    id 'com.jfrog.bintray' version '1.8.4'
 }
 
 apply plugin: 'groovy'
@@ -25,13 +25,18 @@ repositories {
 
 
 dependencies {
-    compile 'org.apache.ant:ant:1.8.4'
-    testCompile 'junit:junit:4.11'
+    implementation 'org.apache.ant:ant:1.8.4'
+    testImplementation 'junit:junit:4.12'
 }
 
+uploadArchives {
+    repositories {
+        mavenLocal()
+    }
+}
 
 group='wang.dannyhe.tools'
-version='0.0.7'
+version='0.0.8-NIKE'
 
 
 plugindev {
@@ -68,6 +73,7 @@ def localProp = loadLocalProp()
 def BINTRAY_USER = localProp['BINTRAY_USER']
 def BINTRAY_API_KEY = localProp['BINTRAY_API_KEY']
 
+/*
 // If you want to upload this, make sure to set BINTRAY_USER and BINTRAY_API_KEY in local.properties
 if (BINTRAY_USER && BINTRAY_API_KEY) {
     bintray {
@@ -81,3 +87,4 @@ if (BINTRAY_USER && BINTRAY_API_KEY) {
         }
     }
 }
+*/

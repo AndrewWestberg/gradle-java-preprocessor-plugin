@@ -11,7 +11,7 @@ public class PreprocessorPlugin implements Plugin<Project> {
     @Override
     void apply(Project project) {
         if (!(project.plugins.hasPlugin('com.android.application') || project.plugins.hasPlugin('com.android.library'))) {
-            throw new ProjectConfigurationException("PreprocessorPlugin should be applyed after the android plugin.",new java.lang.Throwable("void apply(Project project)"))
+            throw new ProjectConfigurationException("PreprocessorPlugin should be applied after the android plugin.",new java.lang.Throwable("void apply(Project project)"))
         }
         //init the extensions
         project.extensions.create('preprocessor', PluginGlobalSettingExtension)
@@ -42,7 +42,7 @@ public class PreprocessorPlugin implements Plugin<Project> {
     }
 
     void configVariant(Object variant, Project project, PluginGlobalSettingExtension global) {
-        final def processorTaskName = "${variant.name.capitalize()}-preprocess"
+        final def processorTaskName = "preprocess${variant.name.capitalize()}"
         def finalFlavorExtensions = new ArrayList<FlavorExtension>()
         if(variant.productFlavors.size() > 0) {
             variant.productFlavors.each { flavor ->
@@ -56,6 +56,11 @@ public class PreprocessorPlugin implements Plugin<Project> {
         }
         fSymbols.addAll(global.symbols)
         project.task(processorTaskName,type:PreprocessorTask) {
+            if(processorTaskName.toLowerCase().contains("debug")) {
+                fSymbols.add("DEBUG")
+            } else {
+                fSymbols.add("NDEBUG")
+            }
             symbols fSymbols.join(",")
             verbose global.verbose
             sourceDir global.sourceDir
@@ -63,7 +68,7 @@ public class PreprocessorPlugin implements Plugin<Project> {
             group global.groupName
             description "Preprocess java source code for ${processorTaskName}:${fSymbols.join(",")}"
         }
-        variant.javaCompile.dependsOn processorTaskName
+        variant.preBuild.dependsOn processorTaskName
     }
 }
 

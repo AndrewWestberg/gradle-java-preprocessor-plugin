@@ -1,13 +1,14 @@
 package wang.dannyhe.tools
 
-import groovy.io.FileType
-import org.gradle.api.DefaultTask
-import org.gradle.api.tasks.TaskAction
-import org.apache.tools.ant.util.FileUtils
-import de.pleumann.antenna.misc.Strings
-import antenna.preprocessor.PreprocessorException
 import antenna.preprocessor.IPreprocessor
-import org.gradle.api.tasks.*;
+import antenna.preprocessor.PreprocessorException
+import de.pleumann.antenna.misc.Strings
+import groovy.io.FileType
+import org.apache.tools.ant.util.FileUtils
+import org.gradle.api.DefaultTask
+import org.gradle.api.tasks.InputDirectory
+import org.gradle.api.tasks.OutputDirectory
+import org.gradle.api.tasks.TaskAction
 
 public class PreprocessorTask extends DefaultTask {
 
@@ -44,7 +45,7 @@ public class PreprocessorTask extends DefaultTask {
     void processTask(IPreprocessor pp){
         final def fileUtil = FileUtils.getFileUtils()
         //we want to filter the java source files
-        sourceDir.traverse(type:FileType.FILES,nameFilter:~/.*\.java/) { File currentFile -> 
+        sourceDir.traverse(type:FileType.FILES,nameFilter:~/.*\.(java|kt)/) { File currentFile ->
             String subFilePath = fileUtil.removeLeadingPath(sourceDir, currentFile)
             String targetFilePath = targetDir.getCanonicalPath() + File.separator + subFilePath
             File targetFile = new File(targetFilePath)
@@ -57,7 +58,7 @@ public class PreprocessorTask extends DefaultTask {
             if (modified) {
                 log(currentFile.getName() + " ... modified")
             } else {
-                log(currentFile.getName() + " ... not modified")
+                //log(currentFile.getName() + " ... not modified")
             }
         }
     }
