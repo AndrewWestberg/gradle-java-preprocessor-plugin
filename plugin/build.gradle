@@ -36,7 +36,7 @@ uploadArchives {
 }
 
 group='wang.dannyhe.tools'
-version='0.0.8-NIKE'
+version='0.0.9-NIKE'
 
 
 plugindev {

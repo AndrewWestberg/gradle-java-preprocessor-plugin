@@ -56,10 +56,10 @@ public class PreprocessorPlugin implements Plugin<Project> {
         }
         fSymbols.addAll(global.symbols)
         project.task(processorTaskName,type:PreprocessorTask) {
-            if(processorTaskName.toLowerCase().contains("debug")) {
-                fSymbols.add("DEBUG")
-            } else {
+            if(processorTaskName.toLowerCase().contains("release")) {
                 fSymbols.add("NDEBUG")
+            } else {
+                fSymbols.add("DEBUG")
             }
             symbols fSymbols.join(",")
             verbose global.verbose
